@@ -1,100 +1,77 @@
-/**
- * =========================================================
- * PROJETO: Contador de Tipos de Conteúdo
- * AUTOR: João Gabriel Santana Chaves
- *
- * DESCRIÇÃO:
- * Este script percorre a coluna L da planilha ativa e
- * contabiliza a quantidade de ocorrências dos formatos
- * de conteúdo:
- * - Fotos
- * - Links
- * - Live
- * - Texto
- * - Vídeos
- *
- * OBJETIVO:
- * Automatizar a contabilização de formatos de conteúdo,
- * reduzindo o trabalho manual em análises e relatórios.
- *
- * TECNOLOGIA:
- * Google Apps Script
- * =========================================================
- */
+"""
+=========================================================
+PROJETO: Contador de Tipos de Conteúdo
+AUTOR: João Gabriel Santana Chaves
 
-function contarTiposConteudo() {
+DESCRIÇÃO:
+Este script percorre uma coluna de uma planilha e
+contabiliza a quantidade de ocorrências dos formatos
+de conteúdo:
+- Fotos
+- Links
+- Live
+- Texto
+- Vídeos
 
-  // Obtém a aba atualmente selecionada
-  const aba = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+OBJETIVO:
+Automatizar a contabilização de formatos de conteúdo,
+reduzindo o trabalho manual em análises e relatórios.
 
-  // Identifica a última linha preenchida da planilha
-  const ultimaLinha = aba.getLastRow();
+TECNOLOGIA:
+Python + Pandas
+=========================================================
+"""
 
-  // Lê os valores da coluna L (12ª coluna), ignorando o cabeçalho
-  const valores = aba
-    .getRange(2, 12, ultimaLinha - 1, 1)
-    .getValues()
-    .flat();
+import pandas as pd
 
-  // Inicializa os contadores de cada formato
-  let fotos = 0;
-  let links = 0;
-  let live = 0;
-  let texto = 0;
-  let videos = 0;
 
-  // Percorre todas as células da coluna analisada
-  valores.forEach(valor => {
+def contar_tipos_conteudo(arquivo_csv, coluna):
+    """
+    Lê um arquivo CSV e contabiliza a quantidade de
+    ocorrências de cada tipo de conteúdo.
+    """
 
-    // Converte o conteúdo para texto e minúsculas
-    // para evitar problemas com letras maiúsculas/minúsculas
-    valor = String(valor).toLowerCase();
+    # Carrega a base de dados
+    df = pd.read_csv(arquivo_csv)
 
-    // Incrementa os contadores quando a palavra é encontrada
-    if (valor.includes("foto")) fotos++;
-    if (valor.includes("link")) links++;
-    if (valor.includes("live")) live++;
-    if (valor.includes("texto")) texto++;
-    if (valor.includes("vídeo") || valor.includes("video")) videos++;
-  });
+    # Converte a coluna para texto e minúsculas
+    valores = df[coluna].astype(str).str.lower()
 
-  // Exibe o resultado no log de execução
-  Logger.log({
-    Fotos: fotos,
-    Links: links,
-    Live: live,
-    Texto: texto,
-    Vídeos: videos
-  });
-}
+    # Inicializa os contadores
+    fotos = 0
+    links = 0
+    live = 0
+    texto = 0
+    videos = 0
 
-function contarTiposConteudo() {
-  const aba = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    # Percorre os registros
+    for valor in valores:
+        if "foto" in valor:
+            fotos += 1
+        if "link" in valor:
+            links += 1
+        if "live" in valor:
+            live += 1
+        if "texto" in valor:
+            texto += 1
+        if "vídeo" in valor or "video" in valor:
+            videos += 1
 
-  const ultimaLinha = aba.getLastRow();
-  const valores = aba.getRange(2, 12, ultimaLinha - 1, 1).getValues().flat();
+    # Exibe os resultados
+    resultado = {
+        "Fotos": fotos,
+        "Links": links,
+        "Live": live,
+        "Texto": texto,
+        "Vídeos": videos
+    }
 
-  let fotos = 0;
-  let links = 0;
-  let live = 0;
-  let texto = 0;
-  let videos = 0;
+    print(resultado)
+    return resultado
 
-  valores.forEach(valor => {
-    valor = String(valor).toLowerCase();
 
-    if (valor.includes("foto")) fotos++;
-    if (valor.includes("link")) links++;
-    if (valor.includes("live")) live++;
-    if (valor.includes("texto")) texto++;
-    if (valor.includes("vídeo") || valor.includes("video")) videos++;
-  });
-
-  Logger.log({
-    Fotos: fotos,
-    Links: links,
-    Live: live,
-    Texto: texto,
-    Vídeos: videos
-  });
-}
+# Exemplo de uso
+contar_tipos_conteudo(
+    arquivo_csv="dados.csv",
+    coluna="Tipo de Conteúdo"
+)
