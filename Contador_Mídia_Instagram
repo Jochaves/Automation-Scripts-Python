@@ -14,18 +14,15 @@ import pandas as pd
 # Carrega a planilha CSV
 df = pd.read_csv("dados.csv")
 
-# Coluna que contém o tipo de conteúdo
-coluna = "Tipo de Conteúdo"
-
-# Normaliza os valores
-tipos = df[coluna].astype(str).str.lower()
+# Coluna I (9ª coluna)
+tipos = df.iloc[:, 8].astype(str).str.lower()
 
 # Contagem
-carrossel = tipos.str.contains("carrossel", na=False).sum()
-imagem = tipos.str.contains("imagem", na=False).sum()
-reel = tipos.str.contains("reel", na=False).sum()
+carrossel = tipos.str.contains("carrossel do instagram", na=False).sum()
+imagem = tipos.str.contains("imagem do instagram", na=False).sum()
+reel = tipos.str.contains("reel do instagram", na=False).sum()
 
-print(f"Carrossel: {carrossel}")
-print(f"Imagem: {imagem}")
-print(f"Reel: {reel}")
+print(f"Carrossel do Instagram: {carrossel}")
+print(f"Imagem do Instagram: {imagem}")
+print(f"Reel do Instagram: {reel}")
 
