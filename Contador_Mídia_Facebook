@@ -1,0 +1,100 @@
+/**
+ * =========================================================
+ * PROJETO: Contador de Tipos de Conteúdo
+ * AUTOR: João Gabriel Santana Chaves
+ *
+ * DESCRIÇÃO:
+ * Este script percorre a coluna L da planilha ativa e
+ * contabiliza a quantidade de ocorrências dos formatos
+ * de conteúdo:
+ * - Fotos
+ * - Links
+ * - Live
+ * - Texto
+ * - Vídeos
+ *
+ * OBJETIVO:
+ * Automatizar a contabilização de formatos de conteúdo,
+ * reduzindo o trabalho manual em análises e relatórios.
+ *
+ * TECNOLOGIA:
+ * Google Apps Script
+ * =========================================================
+ */
+
+function contarTiposConteudo() {
+
+  // Obtém a aba atualmente selecionada
+  const aba = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+  // Identifica a última linha preenchida da planilha
+  const ultimaLinha = aba.getLastRow();
+
+  // Lê os valores da coluna L (12ª coluna), ignorando o cabeçalho
+  const valores = aba
+    .getRange(2, 12, ultimaLinha - 1, 1)
+    .getValues()
+    .flat();
+
+  // Inicializa os contadores de cada formato
+  let fotos = 0;
+  let links = 0;
+  let live = 0;
+  let texto = 0;
+  let videos = 0;
+
+  // Percorre todas as células da coluna analisada
+  valores.forEach(valor => {
+
+    // Converte o conteúdo para texto e minúsculas
+    // para evitar problemas com letras maiúsculas/minúsculas
+    valor = String(valor).toLowerCase();
+
+    // Incrementa os contadores quando a palavra é encontrada
+    if (valor.includes("foto")) fotos++;
+    if (valor.includes("link")) links++;
+    if (valor.includes("live")) live++;
+    if (valor.includes("texto")) texto++;
+    if (valor.includes("vídeo") || valor.includes("video")) videos++;
+  });
+
+  // Exibe o resultado no log de execução
+  Logger.log({
+    Fotos: fotos,
+    Links: links,
+    Live: live,
+    Texto: texto,
+    Vídeos: videos
+  });
+}
+
+function contarTiposConteudo() {
+  const aba = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+  const ultimaLinha = aba.getLastRow();
+  const valores = aba.getRange(2, 12, ultimaLinha - 1, 1).getValues().flat();
+
+  let fotos = 0;
+  let links = 0;
+  let live = 0;
+  let texto = 0;
+  let videos = 0;
+
+  valores.forEach(valor => {
+    valor = String(valor).toLowerCase();
+
+    if (valor.includes("foto")) fotos++;
+    if (valor.includes("link")) links++;
+    if (valor.includes("live")) live++;
+    if (valor.includes("texto")) texto++;
+    if (valor.includes("vídeo") || valor.includes("video")) videos++;
+  });
+
+  Logger.log({
+    Fotos: fotos,
+    Links: links,
+    Live: live,
+    Texto: texto,
+    Vídeos: videos
+  });
+}
